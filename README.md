@@ -7,6 +7,7 @@ Currently it's in a very alpha stage so it'll be able to only generate the truth
 ## Features 
 
 - [x] Truth Table generator (From expression)
+- [ ] Beautify the Table
 - [ ] User input for expression
 - [ ] K-Map generation
 - [ ] Circuit Generation
