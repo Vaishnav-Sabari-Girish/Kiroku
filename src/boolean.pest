@@ -1,0 +1,8 @@
+WHITESPACE = _{ " " | "\t" | "\n" }
+
+expr       = { or }
+or         = { and ~ (("+" | "|") ~ and)* }
+and        = { not ~ (("*" | ".") ~ not)* }
+not        = { ("'" | "!")* ~ primary }
+primary    = { ident | "(" ~ expr ~ ")" }
+ident      = @{ ASCII_ALPHANUMERIC+ }
