@@ -7,7 +7,7 @@ use parser::parse_expr;
 use truth_table::truth_table;
 
 fn main() {
-    let input = "A | B * C";
+    let input = "((A * B) | (!C * !(A + B)))";
     println!();
     println!("Expression: {}", input);
     println!();
