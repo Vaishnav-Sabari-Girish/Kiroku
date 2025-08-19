@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+comfy-table = "7.1.4"
 itertools = "0.14.0"
 pest = "2.8.1"
 pest_derive = "2.8.1"
