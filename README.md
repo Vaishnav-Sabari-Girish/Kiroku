@@ -9,7 +9,7 @@ Currently it's in a very alpha stage so it'll be able to only generate the truth
 ## Features 
 
 - [x] Truth Table generator (From expression)
-- [ ] Beautify the Table
+- [x] Beautify the Table
 - [x] Add support for XOR, XNOR , NOR and NAND operations
 - [ ] User input for expression (TUI Based)
 - [ ] K-Map generation
