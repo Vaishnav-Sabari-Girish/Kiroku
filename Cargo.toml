@@ -11,9 +11,6 @@ repository = "https://github.com/Vaishnav-Sabari-Girish/Kiroku"
 keywords = ["tui", "logic_gates", "ratatui"]
 categories = ["command-line-utilities"]
 
-[build-dependencies]
-pest_generator = "*"
-
 [dependencies]
 comfy-table = "7.1.4"
 crossterm = "0.29.0"
@@ -21,3 +18,6 @@ itertools = "0.14.0"
 pest = "2.8.1"
 pest_derive = "2.8.1"
 ratatui = "0.29.0"
+
+[build-dependencies]
+pest_generator = "2.8.1"
