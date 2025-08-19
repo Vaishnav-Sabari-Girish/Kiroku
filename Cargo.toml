@@ -11,6 +11,9 @@ repository = "https://github.com/Vaishnav-Sabari-Girish/Kiroku"
 keywords = ["tui", "logic_gates", "ratatui"]
 categories = ["command-line-utilities"]
 
+[build-dependencies]
+pest_generator = "*"
+
 [dependencies]
 comfy-table = "7.1.4"
 crossterm = "0.29.0"

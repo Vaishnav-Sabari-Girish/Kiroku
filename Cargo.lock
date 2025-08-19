@@ -340,6 +340,7 @@ dependencies = [
  "itertools 0.14.0",
  "pest",
  "pest_derive",
+ "pest_generator",
  "ratatui",
 ]
 
