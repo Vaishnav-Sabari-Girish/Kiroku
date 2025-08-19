@@ -9,5 +9,7 @@ pub fn eval(expr: &Expr, vars : &HashMap<String, bool>) -> bool {
         Expr::Or(a, b) => eval(a, vars) || eval(b, vars),
         Expr::Xor(a, b) => eval(a, vars) ^ eval(b, vars),
         Expr::Xnor(a, b) => !(eval(a, vars) ^ eval(b, vars)),
+        Expr::Nand(a, b) => !(eval(a, vars) && eval(b, vars)),
+        Expr::Nor(a, b) => !(eval(a, vars) || eval(b, vars)),
     }
 }

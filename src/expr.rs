@@ -6,4 +6,6 @@ pub enum Expr {
     Or(Box<Expr>, Box<Expr>),
     Xnor(Box<Expr>, Box<Expr>),
     Xor(Box<Expr>, Box<Expr>),
+    Nand(Box<Expr>, Box<Expr>),
+    Nor(Box<Expr>, Box<Expr>),
 }

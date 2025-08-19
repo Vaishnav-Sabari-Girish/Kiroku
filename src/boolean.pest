@@ -1,10 +1,14 @@
 WHITESPACE = _{ " " | "\t" | "\n" }
 
+// Precedence: OR/NOR < XOR/XNOR < AND/NAND < NOT < primary
 expr       = { or }
-or         = { xnor ~ ( "|" ~ xnor )* }
-xnor       = { xor ~ ( "!^" ~ xor )*}
-xor        = { and ~ ( "^" ~ and )* }
-and        = { not ~ (("*" | "&") ~ not)* }
+
+or         = { nor ~ ( "|"  ~ nor )* }
+nor        = { xor ~ ( "!|" ~ xor )* }
+xor        = { xnor ~ ( "^"  ~ xnor )* }
+xnor       = { and ~ ( "!^" ~ and )* }
+and        = { nand ~ ("&"  ~ nand )* }
+nand       = { not ~ ("!&" ~ not )* }
 not        = { ("'" | "!")* ~ primary }
 primary    = { ident | "(" ~ expr ~ ")" }
 ident      = @{ ASCII_ALPHANUMERIC+ }

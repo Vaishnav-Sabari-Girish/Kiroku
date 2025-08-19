@@ -30,6 +30,11 @@ fn collect_vars(expr: &Expr, set: &mut HashSet<String>) {
             collect_vars(a, set);
             collect_vars(b, set);
         }
+
+        Expr::Nand(a, b) | Expr::Nor(a, b) => {
+            collect_vars(a, set);
+            collect_vars(b, set);
+        },
     }
 }
 
