@@ -5,6 +5,8 @@ edition = "2024"
 
 [dependencies]
 comfy-table = "7.1.4"
+crossterm = "0.29.0"
 itertools = "0.14.0"
 pest = "2.8.1"
 pest_derive = "2.8.1"
+ratatui = "0.29.0"
