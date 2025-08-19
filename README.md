@@ -11,6 +11,12 @@ Currently it's in a very alpha stage so it'll be able to only generate the truth
 - [x] Truth Table generator (From expression)
 - [x] Beautify the Table
 - [x] Add support for XOR, XNOR , NOR and NAND operations
-- [ ] User input for expression (TUI Based)
+- [x] User input for expression
 - [ ] K-Map generation
 - [ ] Circuit Generation
+
+## Sample outputs 
+
+### Truth Table
+
+![tt](./tt.png)
