@@ -2,6 +2,7 @@ mod expr;
 mod parser;
 mod eval;
 mod truth_table;
+mod k_map;
 
 use ratatui::{
     backend::CrosstermBackend,
@@ -18,6 +19,7 @@ use crossterm::{
 };
 use parser::parse_expr;
 use truth_table::truth_table;
+use k_map::k_map;
 use std::io;
 
 fn expr_input() -> Result<String, io::Error> {
@@ -128,8 +130,9 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
                     .block(Block::default().borders(Borders::ALL).title("Truth Table"))
                     .alignment(ratatui::layout::Alignment::Center)
                     .scroll((scroll, 0)),
-                1 => Paragraph::new("K-Map (Coming Soon)")
-                    .block(Block::default().borders(Borders::ALL).title("K-Map")),
+                1 => Paragraph::new(k_map(&expression))
+                    .block(Block::default().borders(Borders::ALL).title("K-Map"))
+                    .alignment(ratatui::layout::Alignment::Center),
                 2 => Paragraph::new("Circuit (Coming Soon)")
                     .block(Block::default().borders(Borders::ALL).title("Circuit")),
                 _ => Paragraph::new(""),
