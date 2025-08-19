@@ -29,6 +29,10 @@ A ^ B !| C & (!D !^ E)
 and press `Enter`
 
 
+To switch between tabs, use the arrow keys. 
+
+Currently th eK-Map only supports from 2-6 variables.
+
 ## Installation 
 
 ### From crates.io
@@ -51,9 +55,11 @@ cargo run --release
 - [x] Beautify the Table
 - [x] Add support for XOR, XNOR , NOR and NAND operations
 - [x] User input for expression
-- [ ] K-Map generation
+- [x] K-Map generation
 - [ ] Circuit Generation
+- [ ] Equation Simplification
+- [ ] Extend K-Map range
 
-## Outputs
+## Output
 
-![output_truth_table](./tui_tt.gif)
+![Output](./out.gif)
