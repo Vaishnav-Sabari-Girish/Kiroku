@@ -28,6 +28,17 @@ A ^ B !| C & (!D !^ E)
 
 and press `Enter`
 
+
+## Installation 
+
+### From source 
+
+Clone this repo and `cd` into it and run 
+
+```bash
+cargo run --release
+```
+
 ## Features 
 
 - [x] Truth Table generator (From expression)

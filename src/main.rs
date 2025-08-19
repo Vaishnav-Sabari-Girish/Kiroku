@@ -169,5 +169,6 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
 fn main() -> Result<(), io::Error> {
     let input = expr_input()?;
     show_tabs(&input)?;
+    println!("Expression : {}", input);
     Ok(())
 }
