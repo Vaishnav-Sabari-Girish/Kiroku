@@ -11,6 +11,6 @@ Currently it's in a very alpha stage so it'll be able to only generate the truth
 - [x] Truth Table generator (From expression)
 - [ ] Beautify the Table
 - [ ] Add support for XOR, XNOR , NOR and NAND operations
-- [ ] User input for expression
+- [ ] User input for expression (TUI Based)
 - [ ] K-Map generation
 - [ ] Circuit Generation
