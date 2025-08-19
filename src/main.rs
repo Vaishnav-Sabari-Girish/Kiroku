@@ -7,8 +7,8 @@ use ratatui::{
     backend::CrosstermBackend,
     layout::{Constraint, Direction, Layout},
     style::{Color, Style},
-    text::Text,
-    widgets::{Block, Borders, Paragraph},
+    text::{Line, Text},
+    widgets::{Block, Borders, Paragraph, Tabs},
     Terminal,
 };
 use crossterm::{
@@ -89,11 +89,85 @@ fn expr_input() -> Result<String, io::Error> {
     Ok(input)
 }
 
+fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
+    let expression = parse_expr(expr_str.trim());
+    let table_str = truth_table(&expression);
+
+    enable_raw_mode()?;
+
+    let mut stdout = io::stdout();
+    execute!(stdout, EnterAlternateScreen)?;
+    let backend = CrosstermBackend::new(stdout);
+    let mut terminal = Terminal::new(backend)?;
+
+    let tabs = ["Truth Table", "K-Map", "Circuit"];
+    let mut active_tab = 0;
+    let mut scroll: u16 = 0;     //For scrolling
+
+    loop {
+        terminal.draw(|f| {
+            let size = f.area();
+            let chunks = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints([
+                    Constraint::Length(3),    //Tabs
+                    Constraint::Min(0),       //Content
+                ])
+                .split(size);
+
+            let titles: Vec<Line> = tabs.iter().map(|t| Line::from(*t)).collect();
+            let tabs_widget = Tabs::new(titles)
+                .block(Block::default().borders(Borders::ALL).title("Menu"))
+                .highlight_style(Style::default().fg(Color::Yellow))
+                .select(active_tab);
+
+            f.render_widget(tabs_widget, chunks[0]);
+
+            let content = match  active_tab {
+                0 => Paragraph::new(table_str.clone())
+                    .block(Block::default().borders(Borders::ALL).title("Truth Table"))
+                    .alignment(ratatui::layout::Alignment::Center)
+                    .scroll((scroll, 0)),
+                1 => Paragraph::new("K-Map (Coming Soon)")
+                    .block(Block::default().borders(Borders::ALL).title("K-Map")),
+                2 => Paragraph::new("Circuit (Coming Soon)")
+                    .block(Block::default().borders(Borders::ALL).title("Circuit")),
+                _ => Paragraph::new(""),
+            };
+
+            f.render_widget(content, chunks[1]);
+        })?;
+
+        if let  Event::Key(key) = event::read()? {
+            match key.code {
+                KeyCode::Left => {
+                    if active_tab > 0 { active_tab -= 1; }
+                }
+                KeyCode::Right => {
+                    if  active_tab < tabs.len() - 1 {
+                        active_tab += 1;
+                    }
+                }
+                KeyCode::Up => if scroll > 0 {
+                    scroll -= 1;
+                },
+                KeyCode::Down => scroll += 1,
+
+                KeyCode::Esc => break,
+                _ => {}
+            }
+        } 
+    }
+
+    disable_raw_mode()?;
+    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
+    terminal.show_cursor()?;
+
+    Ok(())
+}
 
 fn main() -> Result<(), io::Error> {
-    println!("Enter the Expression : ");
     let input = expr_input()?;
-    let expr = parse_expr(input.trim());
-    truth_table(&expr);
+    show_tabs(&input)?;
     Ok(())
 }

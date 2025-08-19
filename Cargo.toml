@@ -2,6 +2,14 @@
 name = "kiroku"
 version = "0.1.0"
 edition = "2024"
+authors = ["Vaishnav Sabari Girish forgamesonly684@gmail.com"]
+license = "MIT"
+description = "A Rust TUI tool to parse boolean expressions and generate truth tables, with K-Map and circuit visualization."
+readme = "README.md"
+homepage = "https://github.com/Vaishnav-Sabari-Girish/Kiroku"
+repository = "https://github.com/Vaishnav-Sabari-Girish/Kiroku"
+keywords = ["tui", "logic_gates", "ratatui"]
+categories = ["command-line-utilities", "logic_gates"]
 
 [dependencies]
 comfy-table = "7.1.4"
