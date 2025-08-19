@@ -20,3 +20,7 @@ Currently it's in a very alpha stage so it'll be able to only generate the truth
 ### Truth Table
 
 ![tt](./tt.png)
+
+### TUI Input
+
+![input tui v1](./input_tui_v1.gif)
