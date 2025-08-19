@@ -2,9 +2,31 @@
 
 Kiroku is an application that takes a boolean expression like `A + B * C ^ D` and creates a circuit, truth table and Karnaugh Map. 
 
-Currently it's in a very alpha stage so it'll be able to only generate the truth table. 
 
-  Currently supports AND, OR, and NOT only.
+## Symbols 
+
+`!` = NOT
+
+`&` = AND
+
+`|` = OR 
+
+`^` = XOR 
+
+`!&` = NAND 
+
+`!|` = NOR 
+
+`!^` = XNOR
+
+
+Enter an expression like this 
+
+```bash 
+A ^ B !| C & (!D !^ E)
+```
+
+and press `Enter`
 
 ## Features 
 
@@ -15,12 +37,6 @@ Currently it's in a very alpha stage so it'll be able to only generate the truth
 - [ ] K-Map generation
 - [ ] Circuit Generation
 
-## Sample outputs 
+## Outputs
 
-### Truth Table
-
-![tt](./tt.png)
-
-### TUI Input
-
-![input tui v1](./input_tui_v1.gif)
+![output_truth_table](./tui_tt.gif)

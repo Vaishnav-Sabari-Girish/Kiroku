@@ -9,7 +9,7 @@ readme = "README.md"
 homepage = "https://github.com/Vaishnav-Sabari-Girish/Kiroku"
 repository = "https://github.com/Vaishnav-Sabari-Girish/Kiroku"
 keywords = ["tui", "logic_gates", "ratatui"]
-categories = ["command-line-utilities", "logic_gates"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 comfy-table = "7.1.4"
