@@ -7,5 +7,6 @@ pub fn eval(expr: &Expr, vars : &HashMap<String, bool>) -> bool {
         Expr::Not(inner) => !eval(inner, vars),
         Expr::And(a, b) => eval(a, vars) && eval(b, vars),
         Expr::Or(a, b) => eval(a, vars) || eval(b, vars),
+        Expr::Xor(a, b) => eval(a, vars) ^ eval(b, vars),
     }
 }

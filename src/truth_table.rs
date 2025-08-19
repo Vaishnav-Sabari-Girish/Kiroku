@@ -20,6 +20,10 @@ fn collect_vars(expr: &Expr, set: &mut HashSet<String>) {
         Expr::And(a, b) | Expr::Or(a, b) => {
             collect_vars(a, set);
             collect_vars(b, set);
+        },
+        Expr::Xor(a, b) => {
+            collect_vars(a, set);
+            collect_vars(b, set);
         }
     }
 }

@@ -39,6 +39,11 @@ fn build_ast(pair: pest::iterators::Pair<Rule>) -> Expr {
             let first = build_ast(inner.next().unwrap());
             inner.fold(first, |left, next| Expr::Or(Box::new(left), Box::new(build_ast(next))))
         }
+        Rule::xor => {
+            let mut inner = pair.into_inner();
+            let first = build_ast(inner.next().unwrap());
+            inner.fold(first, |left, next| Expr::Xor(Box::new(left), Box::new(build_ast(next))))
+        }
         Rule::expr | Rule::primary => build_ast(pair.into_inner().next().unwrap()),
         _ => unreachable!(),
     }
