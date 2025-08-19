@@ -31,6 +31,12 @@ and press `Enter`
 
 ## Installation 
 
+### From crates.io
+
+```bash
+cargo install kiroku
+```
+
 ### From source 
 
 Clone this repo and `cd` into it and run 
