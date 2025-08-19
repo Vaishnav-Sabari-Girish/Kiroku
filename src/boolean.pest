@@ -1,7 +1,8 @@
 WHITESPACE = _{ " " | "\t" | "\n" }
 
 expr       = { or }
-or         = { xor ~ ( "|" ~ xor )* }
+or         = { xnor ~ ( "|" ~ xnor )* }
+xnor       = { xor ~ ( "!^" ~ xor )*}
 xor        = { and ~ ( "^" ~ and )* }
 and        = { not ~ (("*" | "&") ~ not)* }
 not        = { ("'" | "!")* ~ primary }

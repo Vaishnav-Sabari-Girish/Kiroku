@@ -25,6 +25,11 @@ fn collect_vars(expr: &Expr, set: &mut HashSet<String>) {
             collect_vars(a, set);
             collect_vars(b, set);
         }
+
+        Expr::Xnor(a, b) => {
+            collect_vars(a, set);
+            collect_vars(b, set);
+        }
     }
 }
 

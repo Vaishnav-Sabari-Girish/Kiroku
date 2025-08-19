@@ -4,5 +4,6 @@ pub enum Expr {
     Not(Box<Expr>),
     And(Box<Expr>, Box<Expr>),
     Or(Box<Expr>, Box<Expr>),
+    Xnor(Box<Expr>, Box<Expr>),
     Xor(Box<Expr>, Box<Expr>),
 }

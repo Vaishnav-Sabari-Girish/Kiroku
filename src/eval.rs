@@ -8,5 +8,6 @@ pub fn eval(expr: &Expr, vars : &HashMap<String, bool>) -> bool {
         Expr::And(a, b) => eval(a, vars) && eval(b, vars),
         Expr::Or(a, b) => eval(a, vars) || eval(b, vars),
         Expr::Xor(a, b) => eval(a, vars) ^ eval(b, vars),
+        Expr::Xnor(a, b) => !(eval(a, vars) ^ eval(b, vars)),
     }
 }
