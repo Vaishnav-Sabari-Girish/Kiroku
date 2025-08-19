@@ -17,6 +17,6 @@ fn main() {
     println!("Expression: {}", input);
     println!();
 
-    let expr = parse_expr(input.as_str());
+    let expr = parse_expr(input.trim());
     truth_table(&expr);
 }
