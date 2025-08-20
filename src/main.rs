@@ -3,6 +3,7 @@ mod parser;
 mod eval;
 mod truth_table;
 mod k_map;
+mod logic_gates;
 
 use ratatui::{
     backend::CrosstermBackend,
@@ -20,6 +21,7 @@ use crossterm::{
 use parser::parse_expr;
 use truth_table::truth_table;
 use k_map::k_map;
+use logic_gates::render_into_area;
 use std::io;
 
 fn expr_input() -> Result<String, io::Error> {

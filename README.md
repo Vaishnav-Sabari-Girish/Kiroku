@@ -31,7 +31,13 @@ and press `Enter`
 
 To switch between tabs, use the arrow keys. 
 
-Currently th eK-Map only supports from 2-6 variables.
+## Upcoming Logic Gates 
+
+![logic gates](./gates.png)
+
+The above picture contains the symbols of the upcoming logic gates feature.
+
+Currently the K-Map only supports from 2-6 variables.
 
 ## Installation 
 
