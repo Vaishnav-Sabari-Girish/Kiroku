@@ -1,5 +1,5 @@
 use ratatui::{
-    layout::{Constraint, Direction, Layout, Rect},
+    layout::Rect,
     style::Color,
     symbols,
     widgets::{Block, Borders, canvas::Canvas},
@@ -81,7 +81,7 @@ impl LogicGatesViewer {
         }
         
         // Build the circuit recursively
-        let output_gate_id = self.build_circuit_recursive(expr, &mut gate_id_map, 80.0);
+        let _output_gate_id = self.build_circuit_recursive(expr, &mut gate_id_map, 80.0);
         
         // Position gates in layers
         self.layout_gates();
