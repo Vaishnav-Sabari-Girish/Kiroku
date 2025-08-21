@@ -43,9 +43,10 @@ fn expr_input() -> Result<String, io::Error> {
             let chunks = Layout::default()
                 .direction(Direction::Vertical)
                 .constraints([
-                    Constraint::Percentage(40),   //Top Padding
+                    Constraint::Percentage(30),   //Top Padding
                     Constraint::Length(3),        //Input field Height
-                    Constraint::Percentage(40),  //Bottom Padding
+                    Constraint::Length(6),        //Instructions
+                    Constraint::Percentage(30),   //Bottom Padding
                 ])
                 .split(size);
 
@@ -59,11 +60,10 @@ fn expr_input() -> Result<String, io::Error> {
                 .split(chunks[1])[1];
 
             //Create Input field
-
             let block = Block::default()
                 .borders(Borders::ALL)
                 .style(Style::default().fg(Color::White))
-                .title("Expression");
+                .title("Boolean Expression");
 
             let paragraph = Paragraph::new(Text::from(input.as_str()))
                 .block(block)
@@ -71,15 +71,35 @@ fn expr_input() -> Result<String, io::Error> {
 
             f.render_widget(paragraph, input_area);
 
+            // Instructions
+            let instructions = Paragraph::new(Text::from(vec![
+                Line::from("Enter a boolean expression using:"),
+                Line::from("Variables: A, B, C, etc."),
+                Line::from("Operators: & (AND), | (OR), ! (NOT), ^ (XOR)"),
+                Line::from("Parentheses: ( ) for grouping"),
+                Line::from("Example: A & B | !C"),
+                Line::from("Press Enter to continue, Esc to exit"),
+            ]))
+            .block(Block::default().borders(Borders::ALL).title("Instructions"))
+            .style(Style::default().fg(Color::Gray));
+            
+            f.render_widget(instructions, chunks[2]);
+
         })?;
 
         //Handle Input
-
         if let Event::Key(key) = event::read()? {
             match key.code {
                 KeyCode::Char(c) => input.push(c),
                 KeyCode::Backspace => { input.pop(); },
                 KeyCode::Enter => break,
+                KeyCode::Esc => {
+                    // Clean up and exit
+                    disable_raw_mode()?;
+                    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
+                    terminal.show_cursor()?;
+                    std::process::exit(0);
+                }
                 _ => {}
             }
         }
@@ -104,10 +124,13 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    let tabs = ["Truth Table", "K-Map", "Logic Gates"];
+    let tabs = ["Truth Table", "K-Map", "Logic Circuit"];
     let mut active_tab = 0;
     let mut scroll: u16 = 0;     //For scrolling
     let mut logic_gates_viewer = LogicGatesViewer::new();
+    
+    // Set the expression for the logic gates viewer
+    logic_gates_viewer.set_expression(expression.clone());
 
     loop {
         terminal.draw(|f| {
@@ -116,17 +139,24 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
                 .direction(Direction::Vertical)
                 .constraints([
                     Constraint::Length(3),    //Tabs
+                    Constraint::Length(2),    //Expression display
                     Constraint::Min(0),       //Content
                 ])
                 .split(size);
 
             let titles: Vec<Line> = tabs.iter().map(|t| Line::from(*t)).collect();
             let tabs_widget = Tabs::new(titles)
-                .block(Block::default().borders(Borders::ALL).title("Menu"))
+                .block(Block::default().borders(Borders::ALL).title("Boolean Logic Analyzer"))
                 .highlight_style(Style::default().fg(Color::Yellow))
                 .select(active_tab);
 
             f.render_widget(tabs_widget, chunks[0]);
+
+            // Display the input expression
+            let expr_display = Paragraph::new(Text::from(format!("Expression: {}", expr_str)))
+                .block(Block::default().borders(Borders::ALL))
+                .style(Style::default().fg(Color::Cyan));
+            f.render_widget(expr_display, chunks[1]);
 
             match active_tab {
                 0 => {
@@ -134,16 +164,16 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
                         .block(Block::default().borders(Borders::ALL).title("Truth Table"))
                         .alignment(ratatui::layout::Alignment::Center)
                         .scroll((scroll, 0));
-                    f.render_widget(content, chunks[1]);
+                    f.render_widget(content, chunks[2]);
                 }
                 1 => {
                     let content = Paragraph::new(k_map(&expression))
                         .block(Block::default().borders(Borders::ALL).title("K-Map"))
                         .alignment(ratatui::layout::Alignment::Center);
-                    f.render_widget(content, chunks[1]);
+                    f.render_widget(content, chunks[2]);
                 }
                 2 => {
-                    logic_gates_viewer.render(f, chunks[1]);
+                    logic_gates_viewer.render(f, chunks[2]);
                 }
                 _ => {}
             }
@@ -169,6 +199,44 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
                         scroll += 1;
                     }
                 }
+                KeyCode::Char('r') => {
+                    if active_tab == 2 {
+                        // Reset pan and zoom
+                        logic_gates_viewer.pan_x = 0.0;
+                        logic_gates_viewer.pan_y = 0.0;
+                        logic_gates_viewer.zoom = 1.0;
+                    }
+                }
+                KeyCode::Char('w') => {
+                    if active_tab == 2 {
+                        logic_gates_viewer.pan(0.0, -5.0);
+                    }
+                }
+                KeyCode::Char('s') => {
+                    if active_tab == 2 {
+                        logic_gates_viewer.pan(0.0, 5.0);
+                    }
+                }
+                KeyCode::Char('a') => {
+                    if active_tab == 2 {
+                        logic_gates_viewer.pan(-5.0, 0.0);
+                    }
+                }
+                KeyCode::Char('d') => {
+                    if active_tab == 2 {
+                        logic_gates_viewer.pan(5.0, 0.0);
+                    }
+                }
+                KeyCode::Char('+') | KeyCode::Char('=') => {
+                    if active_tab == 2 {
+                        logic_gates_viewer.zoom_in();
+                    }
+                }
+                KeyCode::Char('-') => {
+                    if active_tab == 2 {
+                        logic_gates_viewer.zoom_out();
+                    }
+                }
                 KeyCode::Esc => break,
                 _ => {}
             }
@@ -178,11 +246,6 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
         if let Event::Mouse(mouse_event) = event::read()? {
             if active_tab == 2 {
                 match mouse_event.kind {
-                    MouseEventKind::Drag(MouseButton::Left) => {
-                        let dx = mouse_event.column as f64;
-                        let dy = mouse_event.row as f64;
-                        logic_gates_viewer.pan(dx, dy);
-                    }
                     MouseEventKind::ScrollUp => {
                         logic_gates_viewer.zoom_in();
                     }
@@ -204,7 +267,24 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
 
 fn main() -> Result<(), io::Error> {
     let input = expr_input()?;
-    show_tabs(&input)?;
-    println!("Expression : {}", input);
+    
+    if input.trim().is_empty() {
+        println!("No expression entered. Exiting.");
+        return Ok(());
+    }
+    
+    // Validate the expression before proceeding
+    match std::panic::catch_unwind(|| parse_expr(input.trim())) {
+        Ok(_) => {
+            show_tabs(&input)?;
+            println!("Expression: {}", input);
+        }
+        Err(_) => {
+            println!("Error: Invalid boolean expression format.");
+            println!("Please use variables (A, B, C, etc.) and operators (&, |, !, ^)");
+            println!("Example: A & B | !C");
+        }
+    }
+    
     Ok(())
 }
