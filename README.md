@@ -31,11 +31,8 @@ and press `Enter`
 
 To switch between tabs, use the arrow keys. 
 
-## Upcoming Logic Gates 
+Press the Right arrow key 2 times to go to the next tab and left arrow key 2 times to go to the previous tab.
 
-![logic gates](./gates.png)
-
-The above picture contains the symbols of the upcoming logic gates feature.
 
 Currently the K-Map only supports from 2-6 variables.
 
@@ -62,10 +59,10 @@ cargo run --release
 - [x] Add support for XOR, XNOR , NOR and NAND operations
 - [x] User input for expression
 - [x] K-Map generation
-- [ ] Circuit Generation
+- [x] Circuit Generation
 - [ ] Equation Simplification
 - [ ] Extend K-Map range
 
 ## Output
 
-![Output](./out.gif)
+![Output](./full.gif)
