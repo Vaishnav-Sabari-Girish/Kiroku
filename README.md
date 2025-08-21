@@ -66,3 +66,4 @@ cargo run --release
 ## Output
 
 ![Output](./full.gif)
+
