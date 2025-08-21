@@ -67,3 +67,11 @@ cargo run --release
 
 ![Output](./full.gif)
 
+                        
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/Vaishnav-Sabari-Girish/Kiroku.svg?variant=dark)](https://starchart.cc/Vaishnav-Sabari-Girish/Kiroku)
+
+                    
+# Thanks 
+
+[![Stargazers repo roster for @Vaishnav-Sabari-Girish/Kiroku](https://reporoster.com/stars/dark/Vaishnav-Sabari-Girish/Kiroku)](https://github.com/Vaishnav-Sabari-Girish/Kiroku/stargazers)
