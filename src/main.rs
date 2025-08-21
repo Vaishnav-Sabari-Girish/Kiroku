@@ -14,14 +14,14 @@ use ratatui::{
     Terminal,
 };
 use crossterm::{
-    event::{self, Event, KeyCode},
+    event::{self, Event, KeyCode, MouseButton, MouseEventKind},
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     execute,
 };
 use parser::parse_expr;
 use truth_table::truth_table;
 use k_map::k_map;
-use logic_gates::render_into_area;
+use logic_gates::LogicGatesViewer;
 use std::io;
 
 fn expr_input() -> Result<String, io::Error> {
@@ -104,9 +104,10 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    let tabs = ["Truth Table", "K-Map", "Circuit"];
+    let tabs = ["Truth Table", "K-Map", "Logic Gates"];
     let mut active_tab = 0;
     let mut scroll: u16 = 0;     //For scrolling
+    let mut logic_gates_viewer = LogicGatesViewer::new();
 
     loop {
         terminal.draw(|f| {
@@ -127,41 +128,71 @@ fn show_tabs(expr_str: &str) -> Result<(), io::Error> {
 
             f.render_widget(tabs_widget, chunks[0]);
 
-            let content = match  active_tab {
-                0 => Paragraph::new(table_str.clone())
-                    .block(Block::default().borders(Borders::ALL).title("Truth Table"))
-                    .alignment(ratatui::layout::Alignment::Center)
-                    .scroll((scroll, 0)),
-                1 => Paragraph::new(k_map(&expression))
-                    .block(Block::default().borders(Borders::ALL).title("K-Map"))
-                    .alignment(ratatui::layout::Alignment::Center),
-                2 => Paragraph::new("Circuit (Coming Soon)")
-                    .block(Block::default().borders(Borders::ALL).title("Circuit")),
-                _ => Paragraph::new(""),
-            };
-
-            f.render_widget(content, chunks[1]);
+            match active_tab {
+                0 => {
+                    let content = Paragraph::new(table_str.clone())
+                        .block(Block::default().borders(Borders::ALL).title("Truth Table"))
+                        .alignment(ratatui::layout::Alignment::Center)
+                        .scroll((scroll, 0));
+                    f.render_widget(content, chunks[1]);
+                }
+                1 => {
+                    let content = Paragraph::new(k_map(&expression))
+                        .block(Block::default().borders(Borders::ALL).title("K-Map"))
+                        .alignment(ratatui::layout::Alignment::Center);
+                    f.render_widget(content, chunks[1]);
+                }
+                2 => {
+                    logic_gates_viewer.render(f, chunks[1]);
+                }
+                _ => {}
+            }
         })?;
 
-        if let  Event::Key(key) = event::read()? {
+        if let Event::Key(key) = event::read()? {
             match key.code {
                 KeyCode::Left => {
                     if active_tab > 0 { active_tab -= 1; }
                 }
                 KeyCode::Right => {
-                    if  active_tab < tabs.len() - 1 {
+                    if active_tab < tabs.len() - 1 {
                         active_tab += 1;
                     }
                 }
-                KeyCode::Up => if scroll > 0 {
-                    scroll -= 1;
-                },
-                KeyCode::Down => scroll += 1,
-
+                KeyCode::Up => {
+                    if active_tab == 0 && scroll > 0 {
+                        scroll -= 1;
+                    }
+                }
+                KeyCode::Down => {
+                    if active_tab == 0 {
+                        scroll += 1;
+                    }
+                }
                 KeyCode::Esc => break,
                 _ => {}
             }
-        } 
+        }
+        
+        // Handle mouse events for Logic Gates tab
+        if let Event::Mouse(mouse_event) = event::read()? {
+            if active_tab == 2 {
+                match mouse_event.kind {
+                    MouseEventKind::Drag(MouseButton::Left) => {
+                        let dx = mouse_event.column as f64;
+                        let dy = mouse_event.row as f64;
+                        logic_gates_viewer.pan(dx, dy);
+                    }
+                    MouseEventKind::ScrollUp => {
+                        logic_gates_viewer.zoom_in();
+                    }
+                    MouseEventKind::ScrollDown => {
+                        logic_gates_viewer.zoom_out();
+                    }
+                    _ => {}
+                }
+            }
+        }
     }
 
     disable_raw_mode()?;
